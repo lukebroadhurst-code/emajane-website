@@ -78,8 +78,15 @@
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
   .toast.bad { background: var(--ember-on-void); }
   footer.end { border-top: 1px solid color-mix(in srgb, var(--stone) 25%, transparent); padding-block: 34px 55px; color: var(--stone); font-size: 18px; }
-  @media (max-width: 560px) { ul.rows li { grid-template-columns: 1fr; } .row-actions { justify-content: flex-start; } }
-  @media (prefers-reduced-motion: reduce) { .toast, .btn { transition: none; } }
+  ul.rows li.flash { animation: flash 2.6s ease-out; }
+  @keyframes flash { 0% { background: color-mix(in srgb, var(--bone) 18%, transparent); } 100% { background: transparent; } }
+  @media (max-width: 560px) {
+    ul.rows li { grid-template-columns: 1fr; } .row-actions { justify-content: flex-start; }
+    .bar .status { flex-basis: 100%; }
+    .bar .btn { flex: 1 1 auto; }
+    #publish { flex-basis: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) { .toast, .btn { transition: none; } ul.rows li.flash { animation: none; background: color-mix(in srgb, var(--bone) 14%, transparent); } }
 </style>
 </head>
 <body>
@@ -91,7 +98,7 @@
 </header>
 
 <div class="wrap">
-  <div class="demo" id="demo" hidden><b>Demo mode.</b> This practice copy saves only in this browser, so you can try everything safely. Nothing here changes the real website.</div>
+  <div class="demo" id="demo" hidden><b>Practice mode.</b> Publishing here only changes this browser, so other devices and visitors will not see it. Real publishing switches on when the site moves to Cloudflare.</div>
   <h1>Gatherings</h1>
   <p class="lede">Your dates, tickets and sold-out notes. Dates that have passed disappear from the website by themselves.</p>
 </div>
@@ -99,6 +106,7 @@
 <div class="bar">
   <div class="wrap">
     <span class="status" id="status" role="status">All changes are published</span>
+    <a class="btn quiet sm" id="seelive" href="../#live" target="_blank" rel="noopener" hidden>See it on the website</a>
     <button class="btn quiet sm" id="revert" type="button" hidden>Discard changes</button>
     <button class="btn quiet" id="preview" type="button">Preview</button>
     <button class="btn solid" id="publish" type="button" disabled>Publish</button>
@@ -122,7 +130,7 @@
       </div>
     </fieldset>
     <div class="field" id="f-url"><label for="url" class="label">Ticket link</label><input id="url" type="url" placeholder="https://" autocomplete="off"><span class="hint">Paste the full web address from your ticket seller. It must start with https://</span><span class="err-msg" role="alert"></span></div>
-    <div class="form-actions"><button class="btn solid" type="submit" id="save">Save gathering</button><button class="btn quiet" type="button" id="cancel">Cancel</button></div>
+    <div class="form-actions"><button class="btn solid" type="submit" id="save">Add to the list</button><button class="btn quiet" type="button" id="cancel">Cancel</button></div>
   </form>
 
   <p class="label" id="up-label">Coming up</p>
@@ -184,7 +192,7 @@
     var d = dirty();
     $('status').textContent = d ? 'You have changes that are not published yet' : 'All changes are published';
     $('status').className = 'status' + (d ? ' dirty' : '');
-    $('publish').disabled = !d; $('revert').hidden = !d;
+    $('publish').disabled = !d; $('revert').hidden = !d; if (d) $('seelive').hidden = true;
 
     var t = today(), items = draft.items.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
     var up = items.filter(function (g) { return new Date(g.date + 'T12:00:00') >= t; });
@@ -196,7 +204,7 @@
   function fill(ul, list) {
     ul.textContent = '';
     list.forEach(function (g) {
-      var li = el('li'), main = el('div', 'row-main');
+      var li = el('li'), main = el('div', 'row-main'); li.dataset.id = g.id;
       main.appendChild(el('span', 'row-date', pretty(g.date)));
       var place = el('span', 'row-place', g.city); if (g.venue) place.appendChild(el('small', null, g.venue));
       main.appendChild(place);
@@ -217,7 +225,7 @@
   function setErr(id, msg) { var f = $(id); f.classList.toggle('err', !!msg); f.querySelector('.err-msg').textContent = msg || ''; }
   function openForm(g) {
     editing = g ? g.id : null;
-    $('form-title').textContent = g ? 'Edit gathering' : 'Add a gathering';
+    $('form-title').textContent = g ? 'Edit gathering' : 'Add a gathering'; $('save').textContent = g ? 'Save changes' : 'Add to the list';
     $('date').value = g ? g.date : ''; $('city').value = g ? g.city : ''; $('venue').value = g ? g.venue || '' : ''; $('url').value = g ? g.ticketUrl || '' : '';
     var s = g ? g.status : 'tickets'; document.querySelector('input[name=status][value=' + s + ']').checked = true;
     ['f-date', 'f-city', 'f-url'].forEach(function (i) { setErr(i, ''); });
@@ -242,7 +250,12 @@
     if (!ok) return;
     var g = { id: editing || 'g' + Date.now().toString(36), date: date, city: city, venue: venue, status: st, ticketUrl: st === 'soldout' ? '' : url };
     if (editing) draft.items = draft.items.map(function (x) { return x.id === editing ? g : x; }); else draft.items.push(g);
-    closeForm(); persistDraft(); toast('Saved. Press Publish to update the website.');
+    var passed = new Date(date + 'T12:00:00') < today(), wasEditing = !!editing;
+    closeForm(); persistDraft();
+    toast(passed ? 'Saved, but that date has already passed, so it will not show on the website.' : (wasEditing ? 'Changes saved. Now press Publish to put them on the website.' : 'Added to the list. Now press Publish to put it on the website.'));
+    if (passed) $('past-wrap').open = true;
+    var row = document.querySelector('li[data-id="' + g.id + '"]');
+    if (row) { row.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' }); row.classList.add('flash'); setTimeout(function () { row.classList.remove('flash'); }, 2800); }
   };
 
   /* ---- buttons ------------------------------------------------------------- */
@@ -252,8 +265,12 @@
     var b = $('publish'); b.disabled = true; b.textContent = 'Publishing';
     publish().then(function () {
       live = clone(draft); live.placeholder = false; draft = clone(live); drop(K_DRAFT); refresh();
-      toast(C.demo ? 'Published to your practice copy.' : 'Published. It will show on your website in a few seconds.');
-    }).catch(function (err) { toast('Not published. ' + err.message, true); refresh(); })
+      $('seelive').hidden = false;
+      toast(C.demo ? 'Published in practice mode. Only this browser shows it. Use “See it on the website” to check.' : 'Published. It will show on your website in a few seconds.');
+    }).catch(function (err) {
+      var offline = err && err.name === 'TypeError';
+      toast('Not published. ' + (offline ? 'The website could not be reached. Refresh this page to sign in again, then try once more.' : err.message), true); refresh();
+    })
       .then(function () { b.textContent = 'Publish'; b.disabled = !dirty(); });
   };
   $('restore').onclick = function () {

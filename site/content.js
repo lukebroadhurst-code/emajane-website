@@ -75,6 +75,31 @@
     }
   }
 
-  load('gatherings').then(renderGatherings).catch(function () { /* keep the built-in list */ });
+  /* A small label on staging and preview so nobody mistakes local edits for what visitors see. */
+  function badge(text, action, onAction) {
+    var old = document.getElementById('emajane-badge'); if (old) old.remove();
+    if (!text) return;
+    var b = document.createElement('div'); b.id = 'emajane-badge'; b.setAttribute('role', 'status');
+    b.style.cssText = 'position:fixed;left:16px;bottom:16px;z-index:50;display:flex;gap:14px;align-items:center;max-width:calc(100vw - 32px);padding:10px 14px;background:#15130F;border:1px solid #7A5A3A;color:#D8CFC0;font-family:var(--f-inscr);font-size:11px;line-height:1.4;letter-spacing:.14em;text-transform:uppercase';
+    var s = document.createElement('span'); s.textContent = text; b.appendChild(s);
+    var a = document.createElement('button'); a.type = 'button'; a.textContent = action; a.onclick = onAction;
+    a.style.cssText = 'font:inherit;letter-spacing:inherit;text-transform:inherit;color:#EFE9DF;background:none;border:1px solid #8C8478;padding:6px 10px;cursor:pointer;white-space:nowrap';
+    b.appendChild(a); document.body.appendChild(b);
+  }
+
+  function show() {
+    load('gatherings').then(function (data) {
+      renderGatherings(data);
+      if (preview && stored('emajane-draft:gatherings')) badge('Previewing changes that are not published yet', 'Close preview', function () { location.href = location.pathname + location.hash; });
+      else if (C.demo && stored('emajane-demo:gatherings')) badge('Showing the practice edits saved in this browser', 'Reset', function () {
+        try { localStorage.removeItem('emajane-demo:gatherings'); localStorage.removeItem('emajane-demo-prev:gatherings'); } catch (e) {}
+        location.reload();
+      });
+      else badge();
+    }).catch(function () { /* keep the built-in list */ });
+  }
+  show();
+  /* Publishing or editing in another tab of this browser updates this page without a refresh. */
+  window.addEventListener('storage', function (e) { if (e.key && e.key.indexOf('emajane-') === 0) show(); });
   window.EMAJANE_CONTENT = { load: load };
 })();
