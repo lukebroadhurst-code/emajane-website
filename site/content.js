@@ -87,8 +87,11 @@
     b.appendChild(a); document.body.appendChild(b);
   }
 
+  var latest = 0;
   function show() {
+    var mine = ++latest;   /* several storage writes arrive in quick succession; only the newest refresh may draw */
     load('gatherings').then(function (data) {
+      if (mine !== latest) return;
       renderGatherings(data);
       if (preview && stored('emajane-draft:gatherings')) badge('Previewing changes that are not published yet', 'Close preview', function () { location.href = location.pathname + location.hash; });
       else if (C.demo && stored('emajane-demo:gatherings')) badge('Showing the practice edits saved in this browser', 'Reset', function () {
