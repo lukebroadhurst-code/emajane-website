@@ -1,0 +1,13 @@
+{
+  "name": "emajane-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --port 8788",
+    "test": "node test.mjs",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

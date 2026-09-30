@@ -1,0 +1,9 @@
+{
+  "placeholder": true,
+  "items": [
+    { "id": "g-bristol", "date": "2026-10-17", "city": "Bristol", "venue": "St George’s", "status": "tickets", "ticketUrl": "https://example.com/tickets/bristol" },
+    { "id": "g-manchester", "date": "2026-10-31", "city": "Manchester", "venue": "Hallé St Peter’s", "status": "tickets", "ticketUrl": "https://example.com/tickets/manchester" },
+    { "id": "g-london", "date": "2026-11-14", "city": "London", "venue": "Union Chapel", "status": "soldout", "ticketUrl": "" },
+    { "id": "g-glastonbury", "date": "2026-12-05", "city": "Glastonbury", "venue": "Winter solstice gathering · The Assembly Rooms", "status": "tickets", "ticketUrl": "https://example.com/tickets/glastonbury" }
+  ]
+}

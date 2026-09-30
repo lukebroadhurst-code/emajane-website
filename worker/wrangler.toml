@@ -1,0 +1,19 @@
+name = "emajane"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+# The website itself. Only /api/* runs the Worker; everything else is served straight from the folder.
+[assets]
+directory = "../site"
+run_worker_first = ["/api/*"]
+
+# Where published content is stored. Local development simulates this with no account.
+# Before the first real deploy run:  npx wrangler kv namespace create CONTENT   and paste the id below.
+[[kv_namespaces]]
+binding = "CONTENT"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[vars]
+# Fill these in when Cloudflare Access is set up (see README). While empty, every admin request is refused.
+ACCESS_TEAM_DOMAIN = ""   # for example  emajane.cloudflareaccess.com
+ACCESS_AUD = ""           # the Application Audience tag from the Access application
