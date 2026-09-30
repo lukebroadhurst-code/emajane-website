@@ -1,0 +1,21 @@
+/* EMAJANE design tokens — built on φ.
+   Type and space scales are Fibonacci numbers, so every step is a golden step. */
+:root {
+  --void: #0B0A09;
+  --void-2: #15130F;
+  --bone: #EFE9DF;
+  --linen: #D8CFC0;
+  --stone: #8C8478;
+  --stone-2: #5E5850;
+  --ember: #7A5A3A;
+  --ember-on-void: #A5845C;  /* Ember lifted just enough to be read as small text on Void */
+
+  --f-display: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+  --f-name: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;  /* names in capitals: simple lines, no flicks */
+  --f-inscr: 'Marcellus', 'Cormorant Garamond', Georgia, serif;
+
+  --s1: 8px;  --s2: 13px; --s3: 21px; --s4: 34px; --s5: 55px; --s6: 89px; --s7: 144px; --s8: 233px;
+  --t1: 13px; --t2: 21px; --t3: 34px; --t4: 55px; --t5: 89px; --t6: 144px;
+
+  --track: 0.28em;
+}
