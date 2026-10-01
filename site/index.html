@@ -9,8 +9,8 @@
 <link rel="icon" type="image/png" href="favicon-64.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>EMAJANE</title>
-<link rel="stylesheet" href="assets/fonts.css">
-<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="assets/fonts.css?v=dev">
+<link rel="stylesheet" href="brand.css?v=dev">
 <style>
   html { background: var(--void); color-scheme: dark; }
   body {
@@ -26,6 +26,7 @@
     overflow-x: hidden;
   }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   a { color: inherit; text-decoration: none; }
   img { max-width: 100%; display: block; }
   h1, h2, h3 { font-weight: 300; margin: 0; text-wrap: balance; }
@@ -217,6 +218,11 @@
   .good .name { font-size: 24px; line-height: 30px; }
   .good .name small { display: block; font-family: var(--f-display); font-style: italic; color: var(--stone-2); font-size: 18px; text-transform: none; letter-spacing: 0; margin-top: 4px; }
   .good .name.caps { font-size: 19px; line-height: 30px; }
+  [data-bind="words.quote"], [data-bind="album.description"], [data-bind="words.aboutText"], [data-bind="words.joinText"], [data-bind="album.exchangeNote"] { white-space: pre-line; }
+  .good .obj .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .shop .link { color: var(--void); }
+  .good .buy { font-size: 12px; }
+  .good .soon { font-family: var(--f-inscr); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--stone-2); }
   .good .price { font-family: var(--f-display); font-weight: 500; font-size: 20px; letter-spacing: .06em; font-variant-numeric: lining-nums; color: var(--void); }
   .sleeve { width: 58%; aspect-ratio: 1; position: relative; z-index: 2; box-shadow: 8px 10px 30px -10px rgba(11,10,9,.5); }
   .obj.vinyl .sleeve { position: absolute; left: 11%; top: 50%; transform: translateY(-50%); width: 56%; }
@@ -296,7 +302,7 @@
       <ul class="nav-r">
         <li><a class="item" href="#about">About</a></li>
         <li><a class="item" href="#community">Community</a></li>
-        <li><a class="item" href="#contact">Contact</a></li>
+        <li><a class="item" href="#contact" data-nav-contact>Contact</a></li>
       </ul>
       <a class="cart" href="#shop" aria-label="Bag, empty">
         <svg viewBox="0 0 18 20" aria-hidden="true"><path d="M3 6h12l1 13H2L3 6z"/><path d="M6 6V5a3 3 0 0 1 6 0v1"/></svg>
@@ -309,23 +315,23 @@
   <section class="hero">
     <div class="smoke" data-geo="smoke" data-opacity=".42" data-seed="7" data-tex="fractalNoise" data-grain="0.004 0.009" data-octaves="6" data-slope="2.2" data-bias="-0.75" data-scale="360" data-blur="0.9" aria-hidden="true"></div>
     <div class="wrap">
-      <p class="label reveal">Debut album · Part I · In</p>
-      <img class="hero-geo reveal" src="assets/art-bone.png" alt="Time Will Tell a Vision artwork by @janthonizor: circles within a circle">
-      <h1 class="reveal">Time Will Tell a Vision</h1>
+      <p class="label reveal" data-bind="album.eyebrow">Debut album · Part I · In</p>
+      <img class="hero-geo reveal" data-photo="heroArt" src="assets/art-bone.png" alt="Time Will Tell a Vision artwork by @janthonizor: circles within a circle">
+      <h1 class="reveal" data-bind="album.title">Time Will Tell a Vision</h1>
       <div class="actions reveal">
-        <a class="btn btn-solid" href="#music">Listen</a>
-        <a class="btn" href="#shop">Buy the album</a>
+        <a class="btn btn-solid" href="#music" data-link="album.listenUrl" data-fallback="#music">Listen</a>
+        <a class="btn" href="#shop" data-link="album.buyUrl" data-fallback="#shop">Buy the album</a>
       </div>
-      <p class="micro reveal"><span class="nb">Not on streaming platforms</span><span class="sep"> · </span><span class="nb">Heard here, in The Listening Room</span><span class="sep"> · </span><span class="nb">432 Hz</span></p>
+      <p class="micro reveal" data-tagline><span class="nb">Not on streaming platforms</span><span class="sep"> · </span><span class="nb">Heard here, in The Listening Room</span><span class="sep"> · </span><span class="nb">432 Hz</span></p>
     </div>
   </section>
 
   <section class="transmission" aria-labelledby="tx">
     <div class="wrap">
       <p class="label" id="tx">A word from EMAJANE</p>
-      <blockquote>This album emerged straight from source, a transmission from creation itself. You are invited into the soul’s deepest chambers, to cast a light on the inside world, so the truth is no longer hidden, but&nbsp;embodied.</blockquote>
+      <blockquote data-bind="words.quote">This album emerged straight from source, a transmission from creation itself. You are invited into the soul’s deepest chambers, to cast a light on the inside world, so the truth is no longer hidden, but&nbsp;embodied.</blockquote>
       <div class="rule" aria-hidden="true"></div>
-      <p class="micro">Part I — In · Part&nbsp;II to follow</p>
+      <p class="micro" data-bind="words.quoteNote">Part I — In · Part&nbsp;II to follow</p>
     </div>
   </section>
 
@@ -364,13 +370,13 @@
   <section class="room" id="music" aria-labelledby="rm">
     <div class="wrap">
       <div class="room-art">
-        <img src="assets/album-art.jpg" alt="Time Will Tell a Vision album artwork: a chain of circles inside a circle, white line on black">
+        <img data-photo="albumCover" src="assets/album-art.jpg" alt="Time Will Tell a Vision album artwork: a chain of circles inside a circle, white line on black">
       </div>
       <div class="room-body">
         <p class="label">The Listening Room</p>
-        <h2 id="rm" class="caps">Time Will Tell a Vision<span class="sub">Part I — In</span></h2>
-        <p class="copy">Created to be listened to as one wave of sound. One song. Guiding you deeper through the layers of yourself each time you pass through. Lay in a dark room, eyes closed, and go completely in.</p>
-        <ol class="tracks">
+        <h2 id="rm" class="caps"><span data-bind="album.title">Time Will Tell a Vision</span><span class="sub" data-bind="album.part">Part I — In</span></h2>
+        <p class="copy" data-bind="album.description">Created to be listened to as one wave of sound. One song. Guiding you deeper through the layers of yourself each time you pass through. Lay in a dark room, eyes closed, and go completely in.</p>
+        <ol class="tracks" data-tracks>
           <li><span>In</span></li>
           <li><span>Time</span></li>
           <li><span>Truth</span></li>
@@ -381,23 +387,23 @@
           <li><span>Breathe the Light</span></li>
         </ol>
         <div class="actions">
-          <a class="btn btn-solid" href="#">Listen</a>
-          <a class="btn" href="#shop">Buy · Vinyl &amp; CD</a>
+          <a class="btn btn-solid" href="#music" data-link="album.listenUrl" data-hide-if-empty hidden>Listen</a>
+          <a class="btn" href="#shop" data-link="album.buyUrl" data-fallback="#shop">Buy · Vinyl &amp; CD</a>
         </div>
-        <p class="micro">These frequencies are shared openly, in devotion to creation. If the music supports you, you are welcome to offer an exchange in return.</p>
+        <p class="micro" data-bind="album.exchangeNote">These frequencies are shared openly, in devotion to creation. If the music supports you, you are welcome to offer an exchange in return.</p>
       </div>
     </div>
   </section>
 
   <section class="earth" id="about" aria-labelledby="ab">
-    <img class="earth-img" src="assets/photo-leaves.jpg" alt="EMAJANE lying among autumn leaves in a white dress, playing her nylon-string guitar">
+    <img class="earth-img" data-photo="aboutPhoto" src="assets/photo-leaves.jpg" alt="EMAJANE lying among autumn leaves in a white dress, playing her nylon-string guitar">
     <div class="earth-veil" aria-hidden="true"></div>
     <div class="wrap">
       <div class="earth-text">
         <p class="label">About</p>
-        <h2 id="ab">Music moves through her like a channel</h2>
-        <p class="copy">Singer, songwriter and composer. Ethereal vocals over hypnotic nylon-string guitar and fluid, dancing rhythms, all tuned to 432 Hz. Her songs are healing transmissions: a bridge between worlds, between people, and between the parts of ourselves we have separated.</p>
-        <a class="link" href="#">Her story</a>
+        <h2 id="ab" data-bind="words.aboutHeading">Music moves through her like a channel</h2>
+        <p class="copy" data-bind="words.aboutText">Singer, songwriter and composer. Ethereal vocals over hypnotic nylon-string guitar and fluid, dancing rhythms, all tuned to 432 Hz. Her songs are healing transmissions: a bridge between worlds, between people, and between the parts of ourselves we have separated.</p>
+        <a class="link" href="#about" data-link="words.aboutLinkUrl" data-hide-if-empty hidden>Her story</a>
       </div>
     </div>
   </section>
@@ -406,14 +412,14 @@
     <img class="temple-geo" src="assets/art-void.png" alt="" aria-hidden="true">
     <div class="wrap">
       <p class="label">Community</p>
-      <h2 id="cm">Stay connected.</h2>
-      <p class="copy">Letters from EMAJANE, when there is something to say. First word on new music, gatherings, and the making of Part&nbsp;II.</p>
+      <h2 id="cm" data-bind="words.joinHeading">Stay connected.</h2>
+      <p class="copy" data-bind="words.joinText">Letters from EMAJANE, when there is something to say. First word on new music, gatherings, and the making of Part&nbsp;II.</p>
       <form class="enter" onsubmit="return false">
         <label class="vh" for="email">Email</label>
         <input id="email" type="email" name="email" placeholder="Your email" autocomplete="email">
         <button class="btn btn-solid" type="submit">Join</button>
       </form>
-      <p class="micro">No noise. Leave whenever you like.</p>
+      <p class="micro" data-bind="words.joinNote">No noise. Leave whenever you like.</p>
     </div>
   </section>
 
@@ -424,9 +430,9 @@
           <p class="label">Shop</p>
           <h2 id="sh">Take it home</h2>
         </div>
-        <a class="link" href="#" style="color: var(--void)">Everything</a>
+        <a class="link" href="#shop" data-shop-all data-hide-if-empty hidden>Everything</a>
       </div>
-      <ul class="goods">
+      <ul class="goods" data-shop>
         <li class="good">
           <div class="obj vinyl">
             <img class="sleeve" src="assets/album-art.jpg" alt="Vinyl sleeve">
@@ -453,7 +459,7 @@
           <p class="price">£28</p>
         </li>
       </ul>
-      <p class="micro" style="margin-top: var(--s4); color: var(--stone-2)">Prices are examples for this mockup.</p>
+      <p class="micro" id="shop-note" style="margin-top: var(--s4); color: var(--stone-2)">Prices are examples for this mockup.</p>
     </div>
   </section>
 </main>
@@ -468,20 +474,20 @@
       <li><a href="#shop">Shop</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#community">Community</a></li>
-      <li><a href="#">Bookings</a></li>
-      <li><a href="#">Contact</a></li>
+      <li hidden><a href="#contact" data-mail="bookingsEmail" data-subject="Booking enquiry">Bookings</a></li>
+      <li hidden><a href="#contact" data-mail="contactEmail">Contact</a></li>
     </ul>
     <ul class="social">
-      <li><a href="https://www.instagram.com/emajane.music/">Instagram</a></li>
-      <li><a href="https://www.youtube.com/@EMAJANEmusic">YouTube</a></li>
+      <li><a href="https://www.instagram.com/emajane.music/" data-link="contact.instagram" data-hide-if-empty>Instagram</a></li>
+      <li><a href="https://www.youtube.com/@EMAJANEmusic" data-link="contact.youtube" data-hide-if-empty>YouTube</a></li>
     </ul>
-    <p class="micro">© 2026 EMAJANE. All songs written &amp; composed by EMAJANE. <span class="nb">Artwork by @janthonizor.</span></p>
+    <p class="micro">© <span data-year>2026</span> EMAJANE. All songs written &amp; composed by EMAJANE. <span class="nb" data-bind="contact.credit">Artwork by @janthonizor.</span></p>
   </div>
 </footer>
 
-<script src="site.config.js"></script>
-<script src="content.js"></script>
-<script src="shared.js"></script>
+<script src="site.config.js?v=dev"></script>
+<script src="content.js?v=dev"></script>
+<script src="shared.js?v=dev"></script>
 
 </body>
 </html>

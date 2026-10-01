@@ -21,6 +21,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      # Browsers may keep a file for ten minutes. Giving each release its own file addresses means a visitor never gets a mix of new and old files.
+      - name: Stamp this release on every file address
+        run: node tools/stamp.mjs "${GITHUB_SHA::8}"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site

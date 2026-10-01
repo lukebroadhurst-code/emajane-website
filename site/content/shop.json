@@ -1,0 +1,9 @@
+{
+  "placeholder": true,
+  "allUrl": "",
+  "items": [
+    { "id": "s-vinyl", "name": "Time Will Tell a Vision", "note": "12″ vinyl · 180g · gatefold", "price": "£30", "status": "available", "buyUrl": "", "image": "", "look": "vinyl" },
+    { "id": "s-cd", "name": "Time Will Tell a Vision", "note": "CD · hand-numbered first pressing", "price": "£15", "status": "available", "buyUrl": "", "image": "", "look": "cd" },
+    { "id": "s-tee", "name": "The Eye tee", "note": "Black organic cotton", "price": "£28", "status": "available", "buyUrl": "", "image": "", "look": "tee" }
+  ]
+}

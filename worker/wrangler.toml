@@ -2,10 +2,10 @@ name = "emajane"
 main = "src/index.js"
 compatibility_date = "2025-09-01"
 
-# The website itself. Only /api/* runs the Worker; everything else is served straight from the folder.
+# The website itself. Only /api/* and /media/* run the Worker; everything else is served straight from the folder.
 [assets]
 directory = "../site"
-run_worker_first = ["/api/*"]
+run_worker_first = ["/api/*", "/media/*"]
 
 # Where published content is stored. Local development simulates this with no account.
 # Before the first real deploy run:  npx wrangler kv namespace create CONTENT   and paste the id below.

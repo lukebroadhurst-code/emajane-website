@@ -5,9 +5,17 @@
   "scripts": {
     "dev": "wrangler dev --port 8788",
     "test": "node test.mjs",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "test:schema": "node schema.test.mjs",
+    "e2e": "node e2e/run.mjs",
+    "test:reading": "node reading.test.mjs",
+    "test:stamp": "node stamp.test.mjs",
+    "test:auth": "node auth.test.mjs",
+    "test:all": "node schema.test.mjs && node reading.test.mjs && node auth.test.mjs && node stamp.test.mjs && node e2e/run.mjs"
   },
   "devDependencies": {
+    "axe-core": "^4.13.0",
+    "playwright-core": "^1.63.0",
     "wrangler": "^4.0.0"
   }
 }

@@ -1,8 +1,9 @@
 /* Where the page finds its content.
-   staging  (github.io, or a file opened locally): static JSON in /content, admin runs in demo mode (saves to this browser only)
-   live     (any other host, including wrangler dev): the Cloudflare Worker at /api */
+   staging  (github.io, a *.localhost address, or a file opened locally): content comes from the files in /content,
+            and the admin works in practice mode (everything is kept in this browser only)
+   live     (any other address, including wrangler dev): content comes from the Cloudflare Worker at /api */
 (function () {
   var h = location.hostname;
-  var staging = /github\.io$/.test(h) || location.protocol === 'file:';
-  window.EMAJANE_CONFIG = { api: staging ? '' : '/api', demo: staging };
+  var staging = /(^|\.)github\.io$/.test(h) || /\.localhost$/.test(h) || location.protocol === 'file:';
+  window.EMAJANE_CONFIG = { api: staging ? '' : '/api', demo: staging, support: '' };
 })();

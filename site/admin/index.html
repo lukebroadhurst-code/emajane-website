@@ -1,300 +1,35 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GB" data-size="normal">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>EMAJANE Admin</title>
+<title>My website · EMAJANE</title>
 <link rel="icon" type="image/png" href="../favicon-64.png">
-<link rel="stylesheet" href="../assets/fonts.css">
-<link rel="stylesheet" href="../brand.css">
-<style>
-  * { box-sizing: border-box; }
-  html { background: var(--void); color-scheme: dark; }
-  body { margin: 0; background: var(--void); color: var(--bone); font-family: var(--f-display); font-size: 21px; line-height: 1.45; font-variant-numeric: lining-nums; -webkit-font-smoothing: antialiased; }
-  a { color: inherit; }
-  button, input, select { font: inherit; color: inherit; }
-  .wrap { width: min(880px, 100%); margin-inline: auto; padding: 0 clamp(16px, 4vw, 34px); }
-  header.top { border-bottom: 1px solid color-mix(in srgb, var(--stone) 25%, transparent); }
-  header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; flex-wrap: wrap; }
-  header.top img { height: 24px; width: auto; }
-  .who { font-family: var(--f-inscr); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--stone); }
-  .who a { color: var(--linen); }
-  .demo { background: var(--void-2); border: 1px solid var(--ember); color: var(--linen); padding: 14px 18px; margin-block: 21px 0; font-size: 18px; }
-  .demo b { font-weight: 500; color: var(--bone); }
-  h1 { font-weight: 300; font-size: clamp(34px, 6vw, 55px); line-height: 1.05; margin: 55px 0 8px; }
-  .lede { color: var(--linen); font-style: italic; margin: 0 0 34px; max-width: 52ch; }
-  .label { font-family: var(--f-inscr); font-size: 12px; letter-spacing: .26em; text-transform: uppercase; color: var(--stone); }
-
-  .btn { font-family: var(--f-inscr); font-size: 13px; letter-spacing: .22em; text-transform: uppercase; padding: 15px 26px; border: 1px solid var(--bone); background: transparent; cursor: pointer; transition: background .3s, color .3s, opacity .3s; }
-  .btn:hover:not(:disabled), .btn:focus-visible { background: var(--bone); color: var(--void); outline: none; }
-  .btn.solid { background: var(--bone); color: var(--void); }
-  .btn.solid:hover:not(:disabled), .btn.solid:focus-visible { background: transparent; color: var(--bone); }
-  .btn:disabled { opacity: .35; cursor: default; }
-  .btn.sm { padding: 9px 16px; font-size: 11px; }
-  .btn.quiet { border-color: color-mix(in srgb, var(--stone) 60%, transparent); color: var(--linen); }
-
-  .bar { position: sticky; top: 0; z-index: 5; background: var(--void); border-bottom: 1px solid color-mix(in srgb, var(--stone) 25%, transparent); }
-  .bar .wrap { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding-block: 14px; }
-  .bar .status { margin-right: auto; font-size: 18px; color: var(--linen); }
-  .bar .status.dirty { color: var(--bone); }
-  .bar .status.dirty::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ember-on-void); margin-right: 10px; }
-
-  ul.rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid color-mix(in srgb, var(--stone) 35%, transparent); }
-  ul.rows li { display: grid; grid-template-columns: 1fr auto; gap: 8px 21px; align-items: center; padding: 18px 0; border-bottom: 1px solid color-mix(in srgb, var(--stone) 35%, transparent); }
-  .row-main { display: grid; gap: 2px; }
-  .row-date { font-family: var(--f-inscr); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--stone); }
-  .row-place { font-size: 26px; font-weight: 300; line-height: 1.15; }
-  .row-place small { display: block; font-size: 18px; font-style: italic; color: var(--stone); }
-  .pill { display: inline-block; font-family: var(--f-inscr); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; border: 1px solid color-mix(in srgb, var(--stone) 60%, transparent); padding: 4px 9px; margin-top: 6px; justify-self: start; color: var(--linen); }
-  .pill.sold { color: var(--ember-on-void); border-color: var(--ember-on-void); }
-  .row-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-  .empty { padding: 34px 0; color: var(--stone); font-style: italic; }
-  details.past { margin-top: 34px; }
-  details.past summary { cursor: pointer; color: var(--stone); font-family: var(--f-inscr); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; padding: 8px 0; }
-  details.past .rows li { opacity: .65; }
-
-  .add { margin: 34px 0 21px; }
-  form.card { border: 1px solid color-mix(in srgb, var(--stone) 45%, transparent); padding: clamp(18px, 4vw, 34px); margin-block: 21px 89px; display: grid; gap: 21px; background: var(--void-2); }
-  form.card[hidden] { display: none; }
-  form.card h2 { margin: 0; font-weight: 300; font-size: 34px; }
-  .field { display: grid; gap: 8px; }
-  .field .hint { font-size: 17px; font-style: italic; color: var(--stone); }
-  .field input[type=text], .field input[type=date], .field input[type=url] { background: var(--void); border: 1px solid color-mix(in srgb, var(--stone) 70%, transparent); padding: 14px 16px; font-size: 21px; width: 100%; color-scheme: dark; }
-  .field input:focus { outline: 2px solid var(--bone); outline-offset: 2px; }
-  .field.err input { border-color: var(--ember-on-void); }
-  .err-msg { color: var(--ember-on-void); font-size: 18px; min-height: 0; }
-  fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; }
-  legend { padding: 0; margin-bottom: 8px; }
-  .choices { display: flex; gap: 10px; flex-wrap: wrap; }
-  .choices label { display: inline-flex; align-items: center; cursor: pointer; }
-  .choices input { position: absolute; opacity: 0; }
-  .choices span { border: 1px solid color-mix(in srgb, var(--stone) 70%, transparent); padding: 12px 20px; font-family: var(--f-inscr); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; }
-  .choices input:checked + span { background: var(--bone); color: var(--void); border-color: var(--bone); }
-  .choices input:focus-visible + span { outline: 2px solid var(--bone); outline-offset: 2px; }
-  .form-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-
-  .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 30px); opacity: 0; transition: .35s; background: var(--bone); color: var(--void); padding: 14px 26px; font-size: 20px; pointer-events: none; z-index: 20; max-width: 90vw; text-align: center; }
-  .toast.show { opacity: 1; transform: translate(-50%, 0); }
-  .toast.bad { background: var(--ember-on-void); }
-  footer.end { border-top: 1px solid color-mix(in srgb, var(--stone) 25%, transparent); padding-block: 34px 55px; color: var(--stone); font-size: 18px; }
-  ul.rows li.flash { animation: flash 2.6s ease-out; }
-  @keyframes flash { 0% { background: color-mix(in srgb, var(--bone) 18%, transparent); } 100% { background: transparent; } }
-  @media (max-width: 560px) {
-    ul.rows li { grid-template-columns: 1fr; } .row-actions { justify-content: flex-start; }
-    .bar .status { flex-basis: 100%; }
-    .bar .btn { flex: 1 1 auto; }
-    #publish { flex-basis: 100%; }
-  }
-  @media (prefers-reduced-motion: reduce) { .toast, .btn { transition: none; } ul.rows li.flash { animation: none; background: color-mix(in srgb, var(--bone) 14%, transparent); } }
-</style>
+<link rel="stylesheet" href="../assets/fonts.css?v=dev">
+<link rel="stylesheet" href="../brand.css?v=dev">
+<link rel="stylesheet" href="admin.css?v=dev">
+<script>/* Use the writing size she chose before anything is drawn, so the page does not jump. */try{var s=localStorage.getItem('emajane-size');if(s==='big'||s==='bigger')document.documentElement.setAttribute('data-size',s);}catch(e){}</script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to the main part of the page</a>
+
 <header class="top">
   <div class="wrap">
-    <a href="../"><img src="../assets/wordmark-bone.png" alt="EMAJANE, back to the website"></a>
-    <span class="who" id="who"></span>
+    <a class="brandmark" href="#/" aria-label="EMAJANE, back to the start"><img src="../assets/wordmark-void.png" alt="EMAJANE"></a>
+    <div class="tools" id="tools"></div>
   </div>
 </header>
 
-<div class="wrap">
-  <div class="demo" id="demo" hidden><b>Practice mode.</b> Publishing here only changes this browser, so other devices and visitors will not see it. Real publishing switches on when the site moves to Cloudflare.</div>
-  <h1>Gatherings</h1>
-  <p class="lede">Your dates, tickets and sold-out notes. Dates that have passed disappear from the website by themselves.</p>
-</div>
+<nav class="wrap crumb" id="crumb" aria-label="Way back" hidden></nav>
 
-<div class="bar">
-  <div class="wrap">
-    <span class="status" id="status" role="status">All changes are published</span>
-    <a class="btn quiet sm" id="seelive" href="../#live" target="_blank" rel="noopener" hidden>See it on the website</a>
-    <button class="btn quiet sm" id="revert" type="button" hidden>Discard changes</button>
-    <button class="btn quiet" id="preview" type="button">Preview</button>
-    <button class="btn solid" id="publish" type="button" disabled>Publish</button>
-  </div>
-</div>
-
-<main class="wrap">
-  <div class="add"><button class="btn" id="add" type="button">Add a gathering</button></div>
-
-  <form class="card" id="form" hidden novalidate>
-    <h2 id="form-title">Add a gathering</h2>
-    <div class="field" id="f-date"><label for="date" class="label">Date</label><input id="date" type="date" required><span class="err-msg" role="alert"></span></div>
-    <div class="field" id="f-city"><label for="city" class="label">City or town</label><input id="city" type="text" maxlength="80" autocomplete="off" required><span class="err-msg" role="alert"></span></div>
-    <div class="field"><label for="venue" class="label">Venue</label><input id="venue" type="text" maxlength="80" autocomplete="off"><span class="hint">Optional. Shown under the city, for example “Union Chapel”.</span></div>
-    <fieldset>
-      <legend class="label">Tickets</legend>
-      <div class="choices" role="radiogroup">
-        <label><input type="radio" name="status" value="tickets" checked><span>Tickets available</span></label>
-        <label><input type="radio" name="status" value="soldout"><span>Sold out</span></label>
-        <label><input type="radio" name="status" value="free"><span>Free entry</span></label>
-      </div>
-    </fieldset>
-    <div class="field" id="f-url"><label for="url" class="label">Ticket link</label><input id="url" type="url" placeholder="https://" autocomplete="off"><span class="hint">Paste the full web address from your ticket seller. It must start with https://</span><span class="err-msg" role="alert"></span></div>
-    <div class="form-actions"><button class="btn solid" type="submit" id="save">Add to the list</button><button class="btn quiet" type="button" id="cancel">Cancel</button></div>
-  </form>
-
-  <p class="label" id="up-label">Coming up</p>
-  <ul class="rows" id="upcoming"></ul>
-  <div class="empty" id="upcoming-empty" hidden>No dates yet. Choose “Add a gathering” to put the first one on the website.</div>
-
-  <details class="past" id="past-wrap" hidden><summary>Past gatherings</summary><ul class="rows" id="past"></ul></details>
+<main id="main" class="wrap" tabindex="-1">
+  <div id="notices" role="region" aria-label="Messages"></div>
+  <div id="view"><p>One moment please…</p></div>
+  <noscript><p class="notice error">This page cannot show yet. Please ask someone to turn on “JavaScript” in your web browser, then refresh the page.</p></noscript>
 </main>
 
-<footer class="end"><div class="wrap">Saving here does not change the website until you press Publish. Preview shows the website with your changes first.
-  <div style="margin-top:14px"><button class="btn quiet sm" id="restore" type="button" hidden>Bring back the previous published version</button></div></div></footer>
-
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script src="../site.config.js"></script>
-<script>
-(function () {
-  var C = window.EMAJANE_CONFIG, NAME = 'gatherings';
-  var K_DRAFT = 'emajane-draft:' + NAME, K_DEMO = 'emajane-demo:' + NAME, K_PREV = 'emajane-demo-prev:' + NAME;
-  var $ = function (id) { return document.getElementById(id); };
-  var live = null, draft = null, editing = null;
-
-  function read(k) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
-  function write(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { toast('This browser will not let the admin save. Try turning off private browsing.', true); } }
-  function drop(k) { try { localStorage.removeItem(k); } catch (e) {} }
-  function clone(o) { return JSON.parse(JSON.stringify(o)); }
-  function same(a, b) { return JSON.stringify(a) === JSON.stringify(b); }
-  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
-  function toast(msg, bad) { var t = $('toast'); t.textContent = msg; t.className = 'toast show' + (bad ? ' bad' : ''); clearTimeout(toast.t); toast.t = setTimeout(function () { t.className = 'toast'; }, 4200); }
-  function today() { var d = new Date(); d.setHours(0, 0, 0, 0); return d; }
-  function pretty(iso) { return new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }); }
-
-  /* ---- loading and saving -------------------------------------------------- */
-  function getLive() {
-    if (C.demo) { var m = read(K_DEMO); if (m) return Promise.resolve(m); }
-    function file() { return fetch('../content/' + NAME + '.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }); }
-    if (!C.api) return file();
-    return fetch(C.api + '/content/' + NAME, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).catch(file);
-  }
-  function publish() {
-    var out = clone(draft); out.placeholder = false;
-    if (C.demo) {
-      write(K_PREV, live); write(K_DEMO, out);
-      return Promise.resolve();
-    }
-    return fetch(C.api + '/admin/content/' + NAME, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(out), credentials: 'same-origin' })
-      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) throw new Error(j.error || 'The website said no.'); }); });
-  }
-  function getPrevious() {
-    if (C.demo) return Promise.resolve(read(K_PREV));
-    return fetch(C.api + '/admin/content/' + NAME + '/previous', { credentials: 'same-origin' }).then(function (r) { return r.ok ? r.json() : null; });
-  }
-
-  /* ---- drawing ------------------------------------------------------------- */
-  function dirty() { return !same(draft, live); }
-  function persistDraft() { if (dirty()) write(K_DRAFT, draft); else drop(K_DRAFT); refresh(); }
-
-  function refresh() {
-    var d = dirty();
-    $('status').textContent = d ? 'You have changes that are not published yet' : 'All changes are published';
-    $('status').className = 'status' + (d ? ' dirty' : '');
-    $('publish').disabled = !d; $('revert').hidden = !d; if (d) $('seelive').hidden = true;
-
-    var t = today(), items = draft.items.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
-    var up = items.filter(function (g) { return new Date(g.date + 'T12:00:00') >= t; });
-    var past = items.filter(function (g) { return new Date(g.date + 'T12:00:00') < t; }).reverse();
-    fill($('upcoming'), up); fill($('past'), past);
-    $('upcoming-empty').hidden = up.length > 0; $('up-label').hidden = up.length === 0;
-    $('past-wrap').hidden = past.length === 0;
-  }
-  function fill(ul, list) {
-    ul.textContent = '';
-    list.forEach(function (g) {
-      var li = el('li'), main = el('div', 'row-main'); li.dataset.id = g.id;
-      main.appendChild(el('span', 'row-date', pretty(g.date)));
-      var place = el('span', 'row-place', g.city); if (g.venue) place.appendChild(el('small', null, g.venue));
-      main.appendChild(place);
-      main.appendChild(el('span', 'pill' + (g.status === 'soldout' ? ' sold' : ''), g.status === 'soldout' ? 'Sold out' : g.status === 'free' ? 'Free entry' : (g.ticketUrl ? 'Tickets available' : 'No ticket link')));
-      var act = el('div', 'row-actions');
-      var edit = el('button', 'btn sm', 'Edit'); edit.type = 'button'; edit.onclick = function () { openForm(g); };
-      var rm = el('button', 'btn sm quiet', 'Remove'); rm.type = 'button';
-      rm.onclick = function () {
-        if (rm.dataset.sure) { draft.items = draft.items.filter(function (x) { return x.id !== g.id; }); persistDraft(); toast('Removed. Press Publish to update the website.'); }
-        else { rm.dataset.sure = '1'; rm.textContent = 'Sure? Remove'; setTimeout(function () { delete rm.dataset.sure; rm.textContent = 'Remove'; }, 3500); }
-      };
-      act.appendChild(edit); act.appendChild(rm);
-      li.appendChild(main); li.appendChild(act); ul.appendChild(li);
-    });
-  }
-
-  /* ---- form ---------------------------------------------------------------- */
-  function setErr(id, msg) { var f = $(id); f.classList.toggle('err', !!msg); f.querySelector('.err-msg').textContent = msg || ''; }
-  function openForm(g) {
-    editing = g ? g.id : null;
-    $('form-title').textContent = g ? 'Edit gathering' : 'Add a gathering'; $('save').textContent = g ? 'Save changes' : 'Add to the list';
-    $('date').value = g ? g.date : ''; $('city').value = g ? g.city : ''; $('venue').value = g ? g.venue || '' : ''; $('url').value = g ? g.ticketUrl || '' : '';
-    var s = g ? g.status : 'tickets'; document.querySelector('input[name=status][value=' + s + ']').checked = true;
-    ['f-date', 'f-city', 'f-url'].forEach(function (i) { setErr(i, ''); });
-    $('form').hidden = false; $('add').hidden = true; toggleUrl();
-    $('form').scrollIntoView({ behavior: 'smooth', block: 'start' }); $('date').focus({ preventScroll: true });
-  }
-  function closeForm() { $('form').hidden = true; $('add').hidden = false; editing = null; }
-  function status() { return document.querySelector('input[name=status]:checked').value; }
-  function toggleUrl() { $('f-url').hidden = status() === 'soldout'; }
-
-  $('add').onclick = function () { openForm(null); };
-  $('cancel').onclick = closeForm;
-  Array.prototype.forEach.call(document.querySelectorAll('input[name=status]'), function (r) { r.onchange = toggleUrl; });
-  $('form').onsubmit = function (e) {
-    e.preventDefault();
-    var date = $('date').value, city = $('city').value.trim(), venue = $('venue').value.trim(), url = $('url').value.trim(), st = status(), ok = true;
-    setErr('f-date', ''); setErr('f-city', ''); setErr('f-url', '');
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { setErr('f-date', 'Choose the date.'); ok = false; }
-    if (!city) { setErr('f-city', 'Add the city or town.'); ok = false; }
-    if (st !== 'soldout' && url && !/^https:\/\/[^\s]+$/i.test(url)) { setErr('f-url', 'The link must start with https:// and have no spaces.'); ok = false; }
-    if (st === 'tickets' && !url) { setErr('f-url', 'Paste the ticket link, or choose Sold out or Free entry.'); ok = false; }
-    if (!ok) return;
-    var g = { id: editing || 'g' + Date.now().toString(36), date: date, city: city, venue: venue, status: st, ticketUrl: st === 'soldout' ? '' : url };
-    if (editing) draft.items = draft.items.map(function (x) { return x.id === editing ? g : x; }); else draft.items.push(g);
-    var passed = new Date(date + 'T12:00:00') < today(), wasEditing = !!editing;
-    closeForm(); persistDraft();
-    toast(passed ? 'Saved, but that date has already passed, so it will not show on the website.' : (wasEditing ? 'Changes saved. Now press Publish to put them on the website.' : 'Added to the list. Now press Publish to put it on the website.'));
-    if (passed) $('past-wrap').open = true;
-    var row = document.querySelector('li[data-id="' + g.id + '"]');
-    if (row) { row.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' }); row.classList.add('flash'); setTimeout(function () { row.classList.remove('flash'); }, 2800); }
-  };
-
-  /* ---- buttons ------------------------------------------------------------- */
-  $('preview').onclick = function () { write(K_DRAFT, draft); window.open('../?preview=1#live', '_blank'); };
-  $('revert').onclick = function () { draft = clone(live); drop(K_DRAFT); closeForm(); refresh(); toast('Changes discarded.'); };
-  $('publish').onclick = function () {
-    var b = $('publish'); b.disabled = true; b.textContent = 'Publishing';
-    publish().then(function () {
-      live = clone(draft); live.placeholder = false; draft = clone(live); drop(K_DRAFT); refresh();
-      $('seelive').hidden = false;
-      toast(C.demo ? 'Published in practice mode. Only this browser shows it. Use “See it on the website” to check.' : 'Published. It will show on your website in a few seconds.');
-    }).catch(function (err) {
-      var offline = err && err.name === 'TypeError';
-      toast('Not published. ' + (offline ? 'The website could not be reached. Refresh this page to sign in again, then try once more.' : err.message), true); refresh();
-    })
-      .then(function () { b.textContent = 'Publish'; b.disabled = !dirty(); });
-  };
-  $('restore').onclick = function () {
-    getPrevious().then(function (p) {
-      if (!p) { toast('There is no earlier version yet.', true); return; }
-      draft = clone(p); persistDraft(); toast('Earlier version loaded. Press Publish to put it on the website.');
-    });
-  };
-  window.addEventListener('beforeunload', function (e) { if (dirty()) { e.preventDefault(); e.returnValue = ''; } });
-
-  /* ---- start --------------------------------------------------------------- */
-  $('demo').hidden = !C.demo;
-  $('restore').hidden = false;
-  if (!C.demo && C.api) {
-    fetch(C.api + '/admin/me', { credentials: 'same-origin' }).then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (m) { if (m && m.email) $('who').textContent = 'Signed in as ' + m.email; }).catch(function () {});
-  }
-  getLive().then(function (data) {
-    live = data; live.items = live.items || [];
-    var d = read(K_DRAFT); draft = d && d.items ? d : clone(live);
-    refresh();
-    if (dirty()) toast('Your unpublished changes from last time are still here.');
-  }).catch(function () { toast('Could not load the gatherings. Refresh the page.', true); });
-})();
-</script>
+<script src="../site.config.js?v=dev"></script>
+<script type="module" src="app.js?v=dev"></script>
 </body>
 </html>
